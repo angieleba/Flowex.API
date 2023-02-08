@@ -10,11 +10,11 @@ dotenv.config();
 await createDatabase();
 
 const app = express();
-const PORT = 8080;
+const PORT = 9005;
 
 process.on('uncaughtException', function (err) {
     console.log(err);
 });
 
-app.use('/', userRoutes);
+app.use('/users', userRoutes);
 app.listen(PORT, () => console.log(`The server is running on port ${PORT}`));

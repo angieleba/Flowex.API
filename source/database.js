@@ -1,11 +1,14 @@
 //  <createDatabaseAndContainer>
-const config = require("../config");
-const CosmosClient = require("@azure/cosmos").CosmosClient;
+import config from "../config.js";
+import { CosmosClient } from "@azure/cosmos";
 
 /*
 // This script ensures that the database is setup and populated correctly
 */
-async function create(client : any, databaseId : string, containerId:string) {
+export async function createDatabase() {
+
+  const { endpoint, key, databaseId, userContainerId } = config;
+  const client = new CosmosClient({ endpoint, key });
   const partitionKey = config.partitionKey;
 
   /**
@@ -22,12 +25,20 @@ async function create(client : any, databaseId : string, containerId:string) {
   const { container } = await client
     .database(databaseId)
     .containers.createIfNotExists(
-      { id: containerId, partitionKey },
+      { id: userContainerId, partitionKey },
       { offerThroughput: 400 }
     );
 
   console.log(`Created container:\n${container.id}\n`);
 }
 
-module.exports = { create };
+export async function getUserContainer(){
+  const { endpoint, key, databaseId, userContainerId } = config;
+  const client = new CosmosClient({ endpoint, key });
+  const database = client.database(databaseId);
+  const container = database.container(userContainerId);
+
+  return container;
+}
+
   //  </createDatabaseAndContainer>
