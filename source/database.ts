@@ -1,5 +1,6 @@
 //  <createDatabaseAndContainer>
-import config from "../config.js";
+
+import config from "./config.js";
 import { CosmosClient } from "@azure/cosmos";
 
 /*

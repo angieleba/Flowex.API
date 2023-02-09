@@ -1,12 +1,18 @@
 {
     "compilerOptions": {
         "forceConsistentCasingInFileNames": true,
-        "module": "commonjs",
+        "module": "es2022",
         "esModuleInterop": true,
         "outDir": "./build",
         "rootDir": "./source",
-        "target": "es6",
+        "target": "ES2022",
         "skipLibCheck": true,
-        "strict": true
+        "moduleResolution": "node",
+        "strict": true,
+        "allowJs": true
+    },
+    "ts-node": {
+        "esm": true
     }
 }
+
