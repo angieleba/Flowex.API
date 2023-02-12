@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "3cc9eb08-2258-49b8-8bb1-7bf6932296dd",
+		"_postman_id": "297952c8-195f-4a91-a27f-11f36a1f8331",
 		"name": "Flowex.API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "24677513"
@@ -144,6 +144,35 @@
 							"path": [
 								"v1",
 								"sellers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"\",\r\n    \"password\" : \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9005/v1/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9005",
+							"path": [
+								"v1",
+								"login"
 							]
 						}
 					},
