@@ -81,6 +81,7 @@ router.post('/', async (req, res) => {
             req.body.phoneNumber,
             req.body.email,
             req.body.vat,
+            req.body.password,
             company);
 
         await container.items.create(buyer);
