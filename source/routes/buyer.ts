@@ -3,7 +3,7 @@ import { getUserContainer } from '../database';
 import bodyParser from "body-parser";
 import { Company } from '../models/company';
 import { Buyer } from '../models/buyer';
-import createhederaAccount from '../hedera/accounts';
+import createHederaAccount from '../hedera/accounts';
 
 const router = express.Router();
 
@@ -102,9 +102,9 @@ router.post('/', async (req, res) => {
                 res.sendStatus(422);
             } else {
 
-                const accountId = await createhederaAccount();
+                const accountId = await createHederaAccount();
                 buyer.anonymousAddress = accountId.toString();
-                
+
                 await container.items.create(buyer);
                 res.sendStatus(200);
             }
@@ -112,6 +112,7 @@ router.post('/', async (req, res) => {
             res.sendStatus(403);
         }
     } catch (e) {
+        console.log(e);
         res.sendStatus(500);
     }
 });

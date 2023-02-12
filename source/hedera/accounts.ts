@@ -1,9 +1,12 @@
-import { AccountCreateTransaction, AccountId, Hbar, LocalProvider, PrivateKey, Wallet } from "@hashgraph/sdk";
+import { AccountCreateTransaction, AccountId, Client, Hbar, LocalProvider, PrivateKey, Wallet } from "@hashgraph/sdk";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 /**
  * createAccount in Hedera
  */
-async function createhederaAccount() : Promise<AccountId> {
+async function createHederaAccount() : Promise<AccountId> {
     if (process.env.OPERATOR_ID == null || process.env.OPERATOR_KEY == null) {
         throw new Error(
             "Environment variables OPERATOR_ID, and OPERATOR_KEY are required."
@@ -22,7 +25,6 @@ async function createhederaAccount() : Promise<AccountId> {
     console.log(`public key = ${newKey.publicKey.toString()}`);
 
     let transaction = await new AccountCreateTransaction()
-        .setInitialBalance(new Hbar(10)) // 10 h
         .setKey(newKey.publicKey)
         .freezeWithSigner(wallet);
 
@@ -42,4 +44,4 @@ async function createhederaAccount() : Promise<AccountId> {
     
 }
 
-export default createhederaAccount;
+export default createHederaAccount;

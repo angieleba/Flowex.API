@@ -53,7 +53,6 @@ export class Person extends Item {
 
 
     isNotNullEmptyOrUndefined(value : string) : boolean {
-        console.log(value);
        var val = (value != null && value.length > 0) ? true : false;
        return val;
     }
