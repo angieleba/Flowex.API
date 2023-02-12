@@ -12,7 +12,6 @@ router.post('/', async (req, res) => {
     try {
         const container = await getUserContainer();
 
-        console.log("body " + req.body.email);
         const querySpec = {
             query: "select * from u where u.email=@email and u.password=@password",
             parameters: [

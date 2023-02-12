@@ -82,6 +82,8 @@ router.post('/', async (req, res) => {
             req.body.email,
             req.body.vat,
             req.body.password,
+            req.body.photo,
+            "address", //TODO: Get hedera address
             company);
 
         if(buyer.isValid()) {
@@ -101,7 +103,6 @@ router.post('/', async (req, res) => {
                 await container.items.create(buyer);
                 res.sendStatus(200);
             }
-
         } else {
             res.sendStatus(403);
         }

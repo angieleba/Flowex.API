@@ -1,7 +1,7 @@
 import { Company } from "./company";
 import { Person } from "./person";
 
-export class Seller extends Person {
+export class Supplier extends Person {
     public partitionKey = "/seller";
 
     constructor(
@@ -12,8 +12,10 @@ export class Seller extends Person {
         email : string = "", 
         vat : string = "",
         password: string = "",
+        photo: string = "",
+        anonymousAddress: string = "",
         company : Company = new Company()
     ){
-        super(firstName, lastName, birthday, phoneNumber, email, vat, password, company);
+        super(firstName, lastName, birthday, phoneNumber, email, vat, password,photo, anonymousAddress, company);
     }
 }

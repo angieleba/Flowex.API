@@ -1,8 +1,9 @@
 import express from 'express';
 import {createDatabase} from './database';
 import buyerRoutes from './routes/buyer';
-import sellerRoutes from './routes/seller';
-import login from './routes/login';
+import sellerRoutes from './routes/supplier';
+import loginRoute from './routes/login';
+import productRoutes from './routes/product';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -24,9 +25,11 @@ async function main() {
 
     app.use('/v1/buyers', buyerRoutes);
 
-    app.use('/v1/sellers', sellerRoutes);
+    app.use('/v1/suppliers', sellerRoutes);
 
-    app.use('/v1/login', login);
+    app.use('/v1/login', loginRoute);
+
+    app.use('/v1/products', productRoutes);
 
     app.listen(PORT, () => console.log(`The server is running on port ${PORT}`));
 }

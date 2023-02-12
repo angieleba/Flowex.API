@@ -11,6 +11,8 @@ export class Person extends Item {
     vat: string;
     password:string;
     company : Company;
+    photo : string;
+    anonymousAddress: string;
 
     constructor(
         firstName : string = "", 
@@ -20,6 +22,8 @@ export class Person extends Item {
         email : string = "", 
         vat : string = "",
         password: string = "",
+        photo: string = "",
+        anonymousAddress: string = "",
         company : Company = new Company()) {
         super();
         this.firstName = firstName;
@@ -29,7 +33,9 @@ export class Person extends Item {
         this.email = email;
         this.vat = vat;
         this.password = password;
+        this.photo = photo;
         this.company = company;
+        this.anonymousAddress = anonymousAddress;
     }
 
 
