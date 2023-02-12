@@ -10,7 +10,7 @@ export class Person extends Item {
     email: string;
     vat: string;
     company : Company;
-    password: string;
+
     constructor(
         firstName : string = "", 
         lastName : string = "", 
@@ -18,7 +18,6 @@ export class Person extends Item {
         number : string = "", 
         email : string = "", 
         vat : string = "",
-        password: string = "",
         company : Company = new Company()) {
         super();
         this.firstName = firstName;
@@ -28,6 +27,5 @@ export class Person extends Item {
         this.email = email;
         this.vat = vat;
         this.company = company;
-        this.password = password;
     }
 }
