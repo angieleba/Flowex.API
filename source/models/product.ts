@@ -1,7 +1,7 @@
 import { ProcessingType } from "../enums/processingType";
 import { QualityAttributes } from "../enums/qualityAttributes";
 import { Shade } from "../enums/shade";
-import { WoodType } from "../enums/WoodType";
+import { WoodType } from "../enums/woodType";
 import { Item } from "./item";
 
 
@@ -14,7 +14,7 @@ export class Product extends Item {
     location: string;
     priceUnit: number;
     currency: string;
-    photo: string;
+    photo: string; //TODO: how to store photos
     quantity: number;
     public partitionKey = "/product";
 
@@ -30,5 +30,17 @@ export class Product extends Item {
         this.currency = "euro";
         this.photo = "";
         this.quantity = 0;
+    }
+
+
+    isValid() : boolean {
+        return this.isNotNullEmptyOrUndefined(this.treeName) && this.isNotNullEmptyOrUndefined(this.location)
+        && this.isNotNullEmptyOrUndefined(this.photo); //TODO: do validation for all fields
+    }
+
+    isNotNullEmptyOrUndefined(value : string) : boolean {
+        console.log(value);
+       var val = (value != null && value.length > 0) ? true : false;
+       return val;
     }
 }

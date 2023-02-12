@@ -10,144 +10,309 @@
 			"name": "/v1",
 			"item": [
 				{
-					"name": "GET Buyer by id",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:9005/v1/buyers/{id}",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "9005",
-							"path": [
-								"v1",
-								"buyers",
-								"{id}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GET Seller by id",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:9005/v1/sellers/{id}",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "9005",
-							"path": [
-								"v1",
-								"sellers",
-								"{id}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "POST buyer",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "    {\r\n        \"firstName\": \"\",\r\n        \"lastName\": \"\",\r\n        \"birthday\": \"\",\r\n        \"phoneNumber\": \"\",\r\n        \"email\": \"\",\r\n        \"vat\": \"\",\r\n        \"password\": \"\",\r\n        \"company\": {\r\n            \"name\": \"\",\r\n            \"registrationNumber\": \"\"\r\n        }\r\n    }",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "Buyer",
+					"item": [
+						{
+							"name": "GET Buyer by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:9005/v1/buyers/{id}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9005",
+									"path": [
+										"v1",
+										"buyers",
+										"{id}"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "http://localhost:9005/v1/buyers",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "9005",
-							"path": [
-								"v1",
-								"buyers"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "POST seller",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "    {\r\n        \"firstName\": \"\",\r\n        \"lastName\": \"\",\r\n        \"birthday\": \"\",\r\n        \"phoneNumber\": \"\",\r\n        \"email\": \"\",\r\n        \"vat\": \"\",\r\n        \"password\": \"\",\r\n        \"company\": {\r\n            \"name\": \"\",\r\n            \"registrationNumber\": \"\"\r\n        }\r\n    }",
-							"options": {
-								"raw": {
-									"language": "json"
+						{
+							"name": "POST buyer",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "    {\r\n        \"firstName\": \"\",\r\n        \"lastName\": \"\",\r\n        \"birthday\": \"\",\r\n        \"phoneNumber\": \"\",\r\n        \"email\": \"\",\r\n        \"vat\": \"\",\r\n        \"password\": \"\",\r\n        \"company\": {\r\n            \"name\": \"\",\r\n            \"registrationNumber\": \"\"\r\n        }\r\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:9005/v1/buyers",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9005",
+									"path": [
+										"v1",
+										"buyers"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "http://localhost:9005/v1/sellers",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "9005",
-							"path": [
-								"v1",
-								"sellers"
-							]
+						{
+							"name": "GET Buyers",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:9005/v1/buyers",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9005",
+									"path": [
+										"v1",
+										"buyers"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "GET Buyers",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:9005/v1/buyers",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "9005",
-							"path": [
-								"v1",
-								"buyers"
-							]
+					"name": "Supplier",
+					"item": [
+						{
+							"name": "GET Supplier by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:9005/v1/suppliers/{id}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9005",
+									"path": [
+										"v1",
+										"suppliers",
+										"{id}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "POST supplier",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "    {\r\n        \"firstName\": \"\",\r\n        \"lastName\": \"\",\r\n        \"birthday\": \"\",\r\n        \"phoneNumber\": \"\",\r\n        \"email\": \"\",\r\n        \"vat\": \"\",\r\n        \"password\": \"\",\r\n        \"company\": {\r\n            \"name\": \"\",\r\n            \"registrationNumber\": \"\"\r\n        }\r\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:9005/v1/suppliers",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9005",
+									"path": [
+										"v1",
+										"suppliers"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET Suppliers",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:9005/v1/suppliers",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9005",
+									"path": [
+										"v1",
+										"suppliers"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET Supplier products",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:9005/v1/suppliers/{supplierId}/products",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9005",
+									"path": [
+										"v1",
+										"suppliers",
+										"{supplierId}",
+										"products"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "GET Sellers",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:9005/v1/sellers",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "9005",
-							"path": [
-								"v1",
-								"sellers"
-							]
+					"name": "Product",
+					"item": [
+						{
+							"name": "GET Product by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:9005/v1/products/{id}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9005",
+									"path": [
+										"v1",
+										"products",
+										"{id}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET Products",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:9005/v1/products?search=searchValueNullable",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9005",
+									"path": [
+										"v1",
+										"products"
+									],
+									"query": [
+										{
+											"key": "search",
+											"value": "searchValueNullable"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CREATE Product",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"treeName\" : \"\",\r\n    \"woodType\" : \"\",\r\n    \"qualityAttributes\" : [\r\n        {\"key\":\"value\"}\r\n    ],\r\n    \"processingType\" : \"\",\r\n    \"shade\" : \"\",\r\n    \"location\" : \"\",\r\n    \"priceUnit\" : 0,\r\n    \"photo\": \"\",\r\n    \"quantity\": 0\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:9005/v1/products/{id}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9005",
+									"path": [
+										"v1",
+										"products",
+										"{id}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UPDATE Product",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"treeName\" : \"\",\r\n    \"woodType\" : \"\",\r\n    \"qualityAttributes\" : [\r\n        {\"key\":\"value\"}\r\n    ],\r\n    \"processingType\" : \"\",\r\n    \"shade\" : \"\",\r\n    \"location\" : \"\",\r\n    \"priceUnit\" : 0,\r\n    \"photo\": \"\",\r\n    \"quantity\": 0\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:9005/v1/products/{id}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9005",
+									"path": [
+										"v1",
+										"products",
+										"{id}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DELETE Product",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:9005/v1/products/{id}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9005",
+									"path": [
+										"v1",
+										"products",
+										"{id}"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
 					"name": "Login",
