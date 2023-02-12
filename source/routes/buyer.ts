@@ -3,6 +3,7 @@ import { getUserContainer } from '../database';
 import bodyParser from "body-parser";
 import { Company } from '../models/company';
 import { Buyer } from '../models/buyer';
+import createhederaAccount from '../hedera/accounts';
 
 const router = express.Router();
 
@@ -83,7 +84,7 @@ router.post('/', async (req, res) => {
             req.body.vat,
             req.body.password,
             req.body.photo,
-            "address", //TODO: Get hedera address
+            "address", //TODO: Get hedera
             company);
 
         if(buyer.isValid()) {
@@ -100,6 +101,10 @@ router.post('/', async (req, res) => {
             if (resources.length > 0){
                 res.sendStatus(422);
             } else {
+
+                const accountId = await createhederaAccount();
+                buyer.anonymousAddress = accountId.toString();
+                
                 await container.items.create(buyer);
                 res.sendStatus(200);
             }
