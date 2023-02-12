@@ -51,4 +51,38 @@ router.post('/',  async (req, res) => {
     res.sendStatus(200);
 });
 
+//GET SELLER BY ID
+router.get('/:id', async (req, res) => {
+    try {
+        const container = await getUserContainer();
+
+        const querySpec = {
+            query: "select * from u where u.id=@id",
+            parameters: [
+                {
+                    name: "@id",
+                    value: req.params.id
+                }
+            ]
+        };
+
+        const { resources } = await container.items.query(querySpec).fetchAll();
+
+        if (resources.length == 1) {
+            res.send(resources[0]);
+        } 
+
+        if(resources.length == 0) {
+            res.sendStatus(404);
+        }
+
+        if(resources.length > 1) {
+            res.sendStatus(500);
+        }
+
+    } catch (e) {
+        res.sendStatus(500);
+    }
+});
+
 export default router;

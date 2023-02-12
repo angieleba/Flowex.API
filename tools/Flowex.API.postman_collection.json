@@ -1,0 +1,158 @@
+{
+	"info": {
+		"_postman_id": "3cc9eb08-2258-49b8-8bb1-7bf6932296dd",
+		"name": "Flowex.API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24677513"
+	},
+	"item": [
+		{
+			"name": "/v1",
+			"item": [
+				{
+					"name": "GET Buyer by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9005/v1/buyers/{id}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9005",
+							"path": [
+								"v1",
+								"buyers",
+								"{id}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Seller by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9005/v1/sellers/{id}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9005",
+							"path": [
+								"v1",
+								"sellers",
+								"{id}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST buyer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"firstName\": \"\",\r\n        \"lastName\": \"\",\r\n        \"birthday\": \"\",\r\n        \"phoneNumber\": \"\",\r\n        \"email\": \"\",\r\n        \"vat\": \"\",\r\n        \"company\": {\r\n            \"name\": \"\",\r\n            \"registrationNumber\": \"\"\r\n        }\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9005/v1/buyers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9005",
+							"path": [
+								"v1",
+								"buyers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST seller",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"firstName\": \"\",\r\n        \"lastName\": \"\",\r\n        \"birthday\": \"\",\r\n        \"phoneNumber\": \"\",\r\n        \"email\": \"\",\r\n        \"vat\": \"\",\r\n        \"company\": {\r\n            \"name\": \"\",\r\n            \"registrationNumber\": \"\"\r\n        }\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9005/v1/sellers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9005",
+							"path": [
+								"v1",
+								"sellers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Buyers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9005/v1/buyers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9005",
+							"path": [
+								"v1",
+								"buyers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Sellers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9005/v1/sellers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9005",
+							"path": [
+								"v1",
+								"sellers"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
