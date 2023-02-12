@@ -9,6 +9,7 @@ export class Person extends Item {
     phoneNumber: string;
     email: string;
     vat: string;
+    password:string;
     company : Company;
 
     constructor(
@@ -18,6 +19,7 @@ export class Person extends Item {
         number : string = "", 
         email : string = "", 
         vat : string = "",
+        password: string = "",
         company : Company = new Company()) {
         super();
         this.firstName = firstName;
@@ -26,6 +28,27 @@ export class Person extends Item {
         this.phoneNumber = number;
         this.email = email;
         this.vat = vat;
+        this.password = password;
         this.company = company;
+    }
+
+
+    isValid() : boolean {
+
+        return this.isNotNullEmptyOrUndefined(this.firstName) &&
+        this.isNotNullEmptyOrUndefined(this.lastName) &&
+        this.isNotNullEmptyOrUndefined(this.phoneNumber) &&
+        this.isNotNullEmptyOrUndefined(this.email) &&
+        this.isNotNullEmptyOrUndefined(this.vat) && //TODO VALIDATE VAT
+        this.isNotNullEmptyOrUndefined(this.password) &&
+        this.isNotNullEmptyOrUndefined(this.company.name) &&
+        this.isNotNullEmptyOrUndefined(this.company.registrationNumber)
+    }
+
+
+    isNotNullEmptyOrUndefined(value : string) : boolean {
+        console.log(value);
+       var val = (value != null && value.length > 0) ? true : false;
+       return val;
     }
 }

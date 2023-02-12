@@ -58,7 +58,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "    {\r\n        \"firstName\": \"\",\r\n        \"lastName\": \"\",\r\n        \"birthday\": \"\",\r\n        \"phoneNumber\": \"\",\r\n        \"email\": \"\",\r\n        \"vat\": \"\",\r\n        \"company\": {\r\n            \"name\": \"\",\r\n            \"registrationNumber\": \"\"\r\n        }\r\n    }",
+							"raw": "    {\r\n        \"firstName\": \"\",\r\n        \"lastName\": \"\",\r\n        \"birthday\": \"\",\r\n        \"phoneNumber\": \"\",\r\n        \"email\": \"\",\r\n        \"vat\": \"\",\r\n        \"password\": \"\",\r\n        \"company\": {\r\n            \"name\": \"\",\r\n            \"registrationNumber\": \"\"\r\n        }\r\n    }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -82,15 +82,12 @@
 				},
 				{
 					"name": "POST seller",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "    {\r\n        \"firstName\": \"\",\r\n        \"lastName\": \"\",\r\n        \"birthday\": \"\",\r\n        \"phoneNumber\": \"\",\r\n        \"email\": \"\",\r\n        \"vat\": \"\",\r\n        \"company\": {\r\n            \"name\": \"\",\r\n            \"registrationNumber\": \"\"\r\n        }\r\n    }",
+							"raw": "    {\r\n        \"firstName\": \"\",\r\n        \"lastName\": \"\",\r\n        \"birthday\": \"\",\r\n        \"phoneNumber\": \"\",\r\n        \"email\": \"\",\r\n        \"vat\": \"\",\r\n        \"password\": \"\",\r\n        \"company\": {\r\n            \"name\": \"\",\r\n            \"registrationNumber\": \"\"\r\n        }\r\n    }",
 							"options": {
 								"raw": {
 									"language": "json"

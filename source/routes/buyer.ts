@@ -71,7 +71,7 @@ router.post('/', async (req, res) => {
     try {
         let company = new Company(
             req.body.company.name,
-            req.body.company.registrationNum
+            req.body.company.registrationNumber
         );
 
         let buyer = new Buyer(
@@ -81,14 +81,33 @@ router.post('/', async (req, res) => {
             req.body.phoneNumber,
             req.body.email,
             req.body.vat,
+            req.body.password,
             company);
 
-        await container.items.create(buyer);
+        if(buyer.isValid()) {
+            const querySpec = {
+                query: "select * from u where u.email=@email",
+                parameters: [
+                    {
+                        name: "@email",
+                        value: req.body.email
+                    }
+                ]
+            };
+            const { resources } = await container.items.query(querySpec).fetchAll();
+            if (resources.length > 0){
+                res.sendStatus(422);
+            } else {
+                await container.items.create(buyer);
+                res.sendStatus(200);
+            }
 
+        } else {
+            res.sendStatus(403);
+        }
     } catch (e) {
         res.sendStatus(500);
     }
-    res.sendStatus(200);
 });
 
 export default router;

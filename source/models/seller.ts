@@ -11,8 +11,9 @@ export class Seller extends Person {
         phoneNumber : string = "", 
         email : string = "", 
         vat : string = "",
+        password: string = "",
         company : Company = new Company()
     ){
-        super(firstName, lastName, birthday, phoneNumber, email, vat, company);
+        super(firstName, lastName, birthday, phoneNumber, email, vat, password, company);
     }
 }
