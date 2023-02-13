@@ -13,9 +13,8 @@ export class Buyer extends Person {
         vat : string = "",
         password: string = "",
         photo: string = "",
-        anonymousAddress: string = "",
         company : Company = new Company()
     ){
-        super(firstName, lastName, birthday, phoneNumber, email, vat, password,photo, anonymousAddress, company);
+        super(firstName, lastName, birthday, phoneNumber, email, vat, password,photo, company);
     }
 }

@@ -6,7 +6,7 @@ dotenv.config();
 /**
  * createAccount in Hedera
  */
-async function createHederaAccount() : Promise<AccountId> {
+async function createHederaAccount() : Promise<any> {
     if (process.env.OPERATOR_ID == null || process.env.OPERATOR_KEY == null) {
         throw new Error(
             "Environment variables OPERATOR_ID, and OPERATOR_KEY are required."
@@ -40,7 +40,11 @@ async function createHederaAccount() : Promise<AccountId> {
 
     console.log(`account id = ${receipt.accountId?.toString()}`);
 
-    return receipt.accountId!;
+    return {
+        accountId : receipt.accountId,
+        publicKey : newKey.publicKey.toString(),
+        privateKey : newKey.toString()
+    };
     
 }
 

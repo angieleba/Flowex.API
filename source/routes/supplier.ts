@@ -3,6 +3,7 @@ import { getUserContainer } from '../database';
 import bodyParser from "body-parser";
 import { Company } from '../models/company';
 import { Supplier } from '../models/supplier';
+import createHederaAccount from '../hedera/accounts';
 const router = express.Router();
 
 router.use(bodyParser.json());
@@ -44,7 +45,6 @@ router.post('/', async (req, res) => {
             req.body.vat,
             req.body.password,
             req.body.photo,
-            "address", //TODO: Get hedera address
             company);
 
         if (seller.isValid()) {
@@ -61,6 +61,10 @@ router.post('/', async (req, res) => {
             if (resources.length > 0) {
                 res.send(422);
             } else {
+                const hederaAccount = await createHederaAccount();
+                seller.anonymousAddress = hederaAccount.accountId.toString();
+                seller.publicKey = hederaAccount.publicKey;
+                seller.privateKey = hederaAccount.privateKey;
                 await container.items.create(seller);
                 res.sendStatus(200);
             }

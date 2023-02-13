@@ -13,7 +13,9 @@ export class Person extends Item {
     company : Company;
     photo : string;
     anonymousAddress: string;
-
+    publicKey : string;
+    privateKey : string;
+    
     constructor(
         firstName : string = "", 
         lastName : string = "", 
@@ -23,7 +25,6 @@ export class Person extends Item {
         vat : string = "",
         password: string = "",
         photo: string = "",
-        anonymousAddress: string = "",
         company : Company = new Company()) {
         super();
         this.firstName = firstName;
@@ -35,7 +36,6 @@ export class Person extends Item {
         this.password = password;
         this.photo = photo;
         this.company = company;
-        this.anonymousAddress = anonymousAddress;
     }
 
 

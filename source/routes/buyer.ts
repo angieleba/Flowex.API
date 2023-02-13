@@ -84,7 +84,6 @@ router.post('/', async (req, res) => {
             req.body.vat,
             req.body.password,
             req.body.photo,
-            "address", //TODO: Get hedera
             company);
 
         if(buyer.isValid()) {
@@ -101,10 +100,10 @@ router.post('/', async (req, res) => {
             if (resources.length > 0){
                 res.sendStatus(422);
             } else {
-
-                const accountId = await createHederaAccount();
-                buyer.anonymousAddress = accountId.toString();
-
+                const hederaAccount = await createHederaAccount();
+                buyer.anonymousAddress = hederaAccount.accountId.toString();
+                buyer.publicKey = hederaAccount.publicKey;
+                buyer.privateKey = hederaAccount.privateKey;
                 await container.items.create(buyer);
                 res.sendStatus(200);
             }
