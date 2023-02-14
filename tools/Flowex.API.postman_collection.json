@@ -178,6 +178,28 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "GET Supplier orders",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:9005/v1/suppliers/{supplierId}/orders",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9005",
+									"path": [
+										"v1",
+										"suppliers",
+										"{supplierId}",
+										"orders"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},
