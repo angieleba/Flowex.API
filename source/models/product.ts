@@ -20,12 +20,12 @@ export class Product extends Item {
 
     constructor() {
         super();
-        this.treeName = "";
+        this.treeName = "Wood";
         this.woodType = WoodType.NotDefined;
         this.qualityAttributes = new Map<QualityAttributes, string>();
         this.processingType = ProcessingType.Undefined;
         this.shade = Shade.Light;
-        this.location = "";
+        this.location = "we dont know";
         this.priceUnit = 0;
         this.currency = "euro";
         this.photo = "";

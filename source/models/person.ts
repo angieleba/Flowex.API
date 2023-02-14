@@ -15,7 +15,6 @@ export class Person extends Item {
     anonymousAddress: string;
     publicKey : string;
     privateKey : string;
-    
     constructor(
         firstName : string = "", 
         lastName : string = "", 
@@ -50,7 +49,6 @@ export class Person extends Item {
         this.isNotNullEmptyOrUndefined(this.company.name) &&
         this.isNotNullEmptyOrUndefined(this.company.registrationNumber)
     }
-
 
     isNotNullEmptyOrUndefined(value : string) : boolean {
        var val = (value != null && value.length > 0) ? true : false;

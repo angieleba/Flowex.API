@@ -21,9 +21,6 @@ async function createHederaAccount() : Promise<any> {
 
     const newKey = PrivateKey.generate();
 
-    console.log(`private key = ${newKey.toString()}`);
-    console.log(`public key = ${newKey.publicKey.toString()}`);
-
     let transaction = await new AccountCreateTransaction()
         .setKey(newKey.publicKey)
         .freezeWithSigner(wallet);
@@ -44,8 +41,7 @@ async function createHederaAccount() : Promise<any> {
         accountId : receipt.accountId,
         publicKey : newKey.publicKey.toString(),
         privateKey : newKey.toString()
-    };
-    
+    }; 
 }
 
 export default createHederaAccount;
