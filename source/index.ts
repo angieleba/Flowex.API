@@ -18,7 +18,7 @@ async function main() {
 
     const app = express();
 
-    const PORT = 8005;
+    const PORT = 8006;
 
     process.on('uncaughtException', function (err) {
         console.log(err);

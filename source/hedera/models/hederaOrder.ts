@@ -2,7 +2,7 @@
 export class HederaOrder {
     productId : string;
     quantity : number;
-    amount: number;
+    cost: number;
     creationDate: Date;
     maxConfirmationTime: Date;
     maxDeliveryDate: Date;

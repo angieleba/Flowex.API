@@ -178,7 +178,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://{{server}}/v1/suppliers/9ae28968-aef9-43a6-96c2-bda210e50f23/orders",
+									"raw": "http://{{server}}/v1/suppliers/{supplierId}/orders",
 									"protocol": "http",
 									"host": [
 										"{{server}}"
@@ -186,8 +186,33 @@
 									"path": [
 										"v1",
 										"suppliers",
-										"9ae28968-aef9-43a6-96c2-bda210e50f23",
+										"{supplierId}",
 										"orders"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Hedera node to query topic",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://testnet.mirrornode.hedera.com/api/v1/topics/{topicId}/messages",
+									"protocol": "https",
+									"host": [
+										"testnet",
+										"mirrornode",
+										"hedera",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"topics",
+										"{topicId}",
+										"messages"
 									]
 								}
 							},
@@ -333,7 +358,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"buyerId\" : \"\",\r\n    \"sellerId\" : \"\",\r\n    \"order\" : {\r\n        \r\n    }\r\n}",
+									"raw": "{\r\n    \"buyerId\" : \"\",\r\n    \"sellerId\" : \"\",\r\n    \"order\" : {\r\n        \"productId\": \"\",\r\n        \"cost\": \"\",\r\n        \"destinationAddress\": \"\",\r\n        \"maxConfirmationTime\": \"\",\r\n        \"maxDeliveryDate\": \"\",\r\n        \"quantity\": \"\"\r\n    }\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -361,7 +386,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"buyerId\" : \"\",\r\n    \"sellerId\" : \"\",\r\n    \"message\" : \"\"\r\n}",
+									"raw": "{\r\n    \"currentStatus\":1,\r\n    \"message\" : \"\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -369,14 +394,15 @@
 									}
 								},
 								"url": {
-									"raw": "http://{{server}}/v1/orders",
+									"raw": "http://{{server}}/v1/orders/{orderId}",
 									"protocol": "http",
 									"host": [
 										"{{server}}"
 									],
 									"path": [
 										"v1",
-										"orders"
+										"orders",
+										"{orderId}"
 									]
 								}
 							},

@@ -20,6 +20,8 @@ router.put('/:id',async (req, res) => {
         const wallet = await getWallet();
         let topic = await getOrderById(req.params.id);
         await sendMessageToTopic(wallet, topic, JSON.stringify(req.body.message));
+
+
     } catch(e) {
         res.sendStatus(500);
     }
@@ -36,7 +38,7 @@ router.post('/', async (req, res) => {
 
         var hederaOrder = new HederaOrder();
         hederaOrder.productId = req.body.order.productId;
-        hederaOrder.amount = req.body.order.amount;
+        hederaOrder.cost = req.body.order.cost;
         hederaOrder.creationDate = new Date();
         hederaOrder.destinationAddress = req.body.order.destinationAddress;
         hederaOrder.maxConfirmationTime = req.body.order.maxConfirmationTime;

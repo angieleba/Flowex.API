@@ -41,21 +41,19 @@ export async function sendMessageToTopic(wallet: Wallet, topicId: TopicId, messa
     }
 }
 
-export function getOrderMessages(topicId: string) : string[] {
-    let client;
+export async function getOrderMessages(topicId: string) : Promise<string[]> {
+    let client : Client;
     let messages : string[] = [];
     try {
-        client = Client.forName(process.env.HEDERA_NETWORK!).setOperator(
-            AccountId.fromString(process.env.OPERATOR_ID!),
-            PrivateKey.fromString(process.env.OPERATOR_KEY!)
-        );
+         client = Client.forTestnet();
     } catch (error) {
         throw new Error(
             "Environment variables HEDERA_NETWORK, OPERATOR_ID, and OPERATOR_KEY are required."
         );
     }
     try {
-        let topic = new TopicMessageQuery()
+        
+        new TopicMessageQuery()
             .setCompletionHandler(() => {
                 console.log("done");
                 return messages;
@@ -75,7 +73,6 @@ export function getOrderMessages(topicId: string) : string[] {
                     console.log(msg);
                 });
              
-        
             return messages;
             //query.unsubscribe();
     } catch (e) {
