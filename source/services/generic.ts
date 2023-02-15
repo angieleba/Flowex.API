@@ -23,7 +23,7 @@ export async function getUserById(id: string) {
     return resources[0];
 }
 
-export async function getOrderById(id: string) {
+export async function getOrderById(id: string) : Promise<Order | null>  {
     const container = await getOrdersContainer();
 
     const querySpec = {

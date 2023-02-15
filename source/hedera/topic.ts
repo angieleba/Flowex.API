@@ -1,8 +1,13 @@
-import { AccountId, Client, LocalProvider, PrivateKey, SubscriptionHandle, TopicCreateTransaction, TopicId, TopicMessageQuery, TopicMessageSubmitTransaction, Wallet } from "@hashgraph/sdk";
-import { create } from "domain";
-import { Order } from "../models/order";
+import {TopicCreateTransaction, TopicId, TopicMessageSubmitTransaction, Wallet } from "@hashgraph/sdk";
+import axios from "axios";
+import * as dotenv from 'dotenv';
+import { OrderStatuses } from "../enums/orderStatuses";
+import { OrderUpdate } from "../models/orderUpdate";
+import { Product } from "../models/product";
 import { OrderView } from "../viewModels/orderView";
+import { HederaOrder } from "./models/hederaOrder";
 
+dotenv.config();
 
 export async function createTopic(wallet: Wallet): Promise<TopicId> {
     // create topic
@@ -21,7 +26,7 @@ export async function createTopic(wallet: Wallet): Promise<TopicId> {
     return createReceipt.topicId!;
 }
 
-export async function sendMessageToTopic(wallet: Wallet, topicId: TopicId, message: string) {
+export async function sendMessageToTopic(wallet: Wallet, topicId: TopicId | string, message: string) {
     // send one message
     try {
         let transaction = await new TopicMessageSubmitTransaction({
@@ -41,41 +46,34 @@ export async function sendMessageToTopic(wallet: Wallet, topicId: TopicId, messa
     }
 }
 
-export async function getOrderMessages(topicId: string) : Promise<string[]> {
-    let client : Client;
-    let messages : string[] = [];
-    try {
-         client = Client.forTestnet();
-    } catch (error) {
-        throw new Error(
-            "Environment variables HEDERA_NETWORK, OPERATOR_ID, and OPERATOR_KEY are required."
-        );
+export async function getOrderByTopic(topicId: string) : Promise<OrderView> {
+    const response = await axios({
+        url: `${process.env.HEDERA_MIRROR_NODE_URL}/api/v1/topics/${topicId}/messages`,
+        method: "get",
+    });
+
+    let messages : string [] = [];
+    let orderJsonParsed : HederaOrder = JSON.parse(Buffer.from(response.data.messages[0].message, 'base64').toString('utf-8'));
+    let orderStatus = OrderStatuses.Created;
+    for (let i = 1; i < response.data.messages.length; i++) {
+        let m = response.data.messages[i];
+        let statusMsg : OrderUpdate = JSON.parse(Buffer.from(m.message, 'base64').toString('utf-8'));
+        orderStatus = statusMsg.st;
+        messages.push(statusMsg.m);
     }
-    try {
-        
-        new TopicMessageQuery()
-            .setCompletionHandler(() => {
-                console.log("done");
-                return messages;
-            })
-            .setErrorHandler((message, error) => {
-                console.log(error);
-                console.log(message);
-            })
-            .setTopicId(topicId)
-            .setStartTime(0)
-            .subscribe(
-                client,
-                null,
-                (message) => {
-                    let msg = Buffer.from(message.contents).toString("utf8");
-                    messages.push(msg);
-                    console.log(msg);
-                });
-             
-            return messages;
-            //query.unsubscribe();
-    } catch (e) {
-        throw new Error("Failed to retrieve Hedera messages for topic " + topicId);
-    }
+
+    let order = new OrderView(
+        new Product(), //TODO: get from smart contract
+        topicId, 
+        orderJsonParsed.q, 
+        orderJsonParsed.c, 
+        orderStatus, 
+        orderJsonParsed.date, 
+        orderJsonParsed.maxt, 
+        orderJsonParsed.maxdd, 
+        orderJsonParsed.dest, 
+        messages);
+
+        console.log("Our order: ", order);
+        return order;
 }

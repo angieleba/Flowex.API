@@ -1,14 +1,12 @@
 
 export class HederaOrder {
-    productId : string;
-    quantity : number;
-    cost: number;
-    creationDate: Date;
-    maxConfirmationTime: Date;
-    maxDeliveryDate: Date;
-    destinationAddress: string;
-    buyerAnonymousAddress: string;
-    supplierAnonymousAddress: string;
+    pId : string; //productId
+    q : number; //quantity
+    c: number; //cost
+    date: Date; //creatioDate
+    maxt: Date; //maxConfirmationTime
+    maxdd: Date; //maxDeliveryDate
+    dest: string;
 
     constructor() {
     }

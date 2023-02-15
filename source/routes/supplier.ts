@@ -9,7 +9,7 @@ import { OrderView } from '../viewModels/orderView';
 import { Product } from '../models/product';
 import { getUserById, getUserOrders } from '../services/generic';
 import { TopicMessageQuery } from '@hashgraph/sdk';
-import { getOrderMessages } from '../hedera/topic';
+import { getOrderByTopic } from '../hedera/topic';
 const router = express.Router();
 
 router.use(bodyParser.json());
@@ -137,85 +137,17 @@ router.get('/:id/products', async (req, res) => {
 });
 
 router.get('/:id/orders', async (req, res) => {
-    let finalOrders : string[] = [];
+    let finalOrders : OrderView[] = [];
 
      try {
-        //  let orders = await getUserOrders(req.params.id, true);
-        //  orders.forEach(order => {
-        //     finalOrders = getOrderMessages(order.topicId);
-        //     console.log("final order", finalOrders);
-        //  });
+
+         let topics = await getUserOrders(req.params.id, true);
+         for (let i = 0; i < topics.length; i++) {
+            let orderView : OrderView = await getOrderByTopic(topics[i].topicId);
+            finalOrders.push(orderView);
+         }
         
-        //  res.send(finalOrders);
-
-        var orders = [
-            new OrderView(new Product(), "1", 10, 50, OrderStatuses.Created, new Date(), new Date(), new Date(), "strssse 75",
-                [
-                    "Order with id x was created on 13 may 2023."
-                ]),
-            new OrderView(new Product(), "2", 10, 50, OrderStatuses.Approved, new Date(), new Date(), new Date(), "strssse 75",
-                [
-                    "Order with id x was created on 13 may 2023.",
-                    "Order x was approved by the seller on 12 May 2023",
-                ]),
-            new OrderView(new Product(), "3", 10, 50, OrderStatuses.Rejected, new Date(), new Date(), new Date(), "strssse 75",
-                [
-                    "Order with id x was created on 13 may 2023.",
-                    "Order x was rejected by the seller on 14 may 2023",
-                ]),
-            new OrderView(new Product(), "4", 10, 50, OrderStatuses.PartiallyPaid, new Date(), new Date(), new Date(), "strssse 75",
-                [
-                    "Order with id x was created on 13 may 2023.",
-                    "Order x was approved by the seller",
-                    "Buyer paid 10% of the total amount"
-                ]),
-
-            new OrderView(new Product(), "5", 10, 50, OrderStatuses.InElaboration, new Date(), new Date(), new Date(), "strssse 75",
-                [
-                    "Order with id x was created on 13 may 2023.",
-                    "Order x was approved by the seller",
-                    "Buyer paid 10% of the total amount",
-                    "Order is being prepared"
-                ]),
-            new OrderView(new Product(), "6", 10, 50, OrderStatuses.InTransit, new Date(), new Date(), new Date(), "strssse 75",
-                [
-                    "Order with id x was created on 13 may 2023.",
-                    "Order x was approved by the seller",
-                    "Buyer paid 10% of the total amount",
-                    "Order is being prepared",
-                    "Order has been shipped on the 15th of May 2023"
-                ]),
-            new OrderView(new Product(), "7", 10, 50, OrderStatuses.Delivered, new Date(), new Date(), new Date(), "strssse 75",
-                [
-                    "Order with id x was created on 13 may 2023.",
-                    "Order x was approved by the seller",
-                    "Buyer paid 10% of the total amount",
-                    "Order is being prepared",
-                    "Order has been shipped on the 15th of May 2023",
-                    "Supplier confirms he delivered the order"
-                ]),
-            new OrderView(new Product(), "8", 10, 50, OrderStatuses.Completed, new Date(), new Date(), new Date(), "strssse 75",
-                [
-                    "Order with id x was created on 13 may 2023.",
-                    "Order x was approved by the seller",
-                    "Buyer paid 10% of the total amount",
-                    "Order is being prepared",
-                    "Order has been shipped on the 15th of May 2023",
-                    "Supplier confirms he delivered the order",
-                    "Buyer x completed the order and sent x amount of money to the supplier."
-                ]),
-            new OrderView(new Product(), "9", 10, 50, OrderStatuses.Rejected, new Date(), new Date(), new Date(), "strssse 75",
-                [
-                    "Order with id x was created on 13 may 2023.",
-                    "Order x was approved by the seller",
-                    "Buyer paid 10% of the total amount",
-                    "Order is being prepared",
-                    "Order has been shipped on the 15th of May 2023",
-                    "Supplier confirms he delivered the order",
-                    "Buyer x rejected the payment stating it has not received the delivery."
-                ])
-        ];
-       res.send(orders);
+         res.send(finalOrders);
 
     } catch (e) {
         res.sendStatus(500);
