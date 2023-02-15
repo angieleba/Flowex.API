@@ -7,6 +7,7 @@ const config = {
     key: process.env.COSMOS_KEY ?? "",
     databaseId: "Overpass",
     userContainerId: "Users",
+    ordersContainerId: "Orders",
     partitionKey: { kind: "Hash", paths: ["/partitionKey"] }
   };
   

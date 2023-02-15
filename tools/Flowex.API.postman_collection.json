@@ -18,12 +18,11 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:9005/v1/buyers/{id}",
+									"raw": "http://{{server}}/v1/buyers/{id}",
 									"protocol": "http",
 									"host": [
-										"localhost"
+										"{{server}}"
 									],
-									"port": "9005",
 									"path": [
 										"v1",
 										"buyers",
@@ -48,12 +47,11 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:9005/v1/buyers",
+									"raw": "http://{{server}}/v1/buyers",
 									"protocol": "http",
 									"host": [
-										"localhost"
+										"{{server}}"
 									],
-									"port": "9005",
 									"path": [
 										"v1",
 										"buyers"
@@ -68,12 +66,11 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:9005/v1/buyers",
+									"raw": "http://{{server}}/v1/buyers",
 									"protocol": "http",
 									"host": [
-										"localhost"
+										"{{server}}"
 									],
-									"port": "9005",
 									"path": [
 										"v1",
 										"buyers"
@@ -93,12 +90,11 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:9005/v1/suppliers/{id}",
+									"raw": "http://{{server}}/v1/suppliers/{id}",
 									"protocol": "http",
 									"host": [
-										"localhost"
+										"{{server}}"
 									],
-									"port": "9005",
 									"path": [
 										"v1",
 										"suppliers",
@@ -123,12 +119,11 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:9005/v1/suppliers",
+									"raw": "http://{{server}}/v1/suppliers",
 									"protocol": "http",
 									"host": [
-										"localhost"
+										"{{server}}"
 									],
-									"port": "9005",
 									"path": [
 										"v1",
 										"suppliers"
@@ -143,12 +138,11 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:9005/v1/suppliers",
+									"raw": "http://{{server}}/v1/suppliers",
 									"protocol": "http",
 									"host": [
-										"localhost"
+										"{{server}}"
 									],
-									"port": "9005",
 									"path": [
 										"v1",
 										"suppliers"
@@ -163,12 +157,11 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:9005/v1/suppliers/{supplierId}/products",
+									"raw": "http://{{server}}/v1/suppliers/{supplierId}/products",
 									"protocol": "http",
 									"host": [
-										"localhost"
+										"{{server}}"
 									],
-									"port": "9005",
 									"path": [
 										"v1",
 										"suppliers",
@@ -185,16 +178,15 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:9005/v1/suppliers/{supplierId}/orders",
+									"raw": "http://{{server}}/v1/suppliers/9ae28968-aef9-43a6-96c2-bda210e50f23/orders",
 									"protocol": "http",
 									"host": [
-										"localhost"
+										"{{server}}"
 									],
-									"port": "9005",
 									"path": [
 										"v1",
 										"suppliers",
-										"{supplierId}",
+										"9ae28968-aef9-43a6-96c2-bda210e50f23",
 										"orders"
 									]
 								}
@@ -212,12 +204,11 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:9005/v1/products/{id}",
+									"raw": "http://{{server}}/v1/products/{id}",
 									"protocol": "http",
 									"host": [
-										"localhost"
+										"{{server}}"
 									],
-									"port": "9005",
 									"path": [
 										"v1",
 										"products",
@@ -233,12 +224,11 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:9005/v1/products?search=searchValueNullable",
+									"raw": "http://{{server}}/v1/products?search=searchValueNullable",
 									"protocol": "http",
 									"host": [
-										"localhost"
+										"{{server}}"
 									],
-									"port": "9005",
 									"path": [
 										"v1",
 										"products"
@@ -268,12 +258,11 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:9005/v1/products/{id}",
+									"raw": "http://{{server}}/v1/products/{id}",
 									"protocol": "http",
 									"host": [
-										"localhost"
+										"{{server}}"
 									],
-									"port": "9005",
 									"path": [
 										"v1",
 										"products",
@@ -298,12 +287,11 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:9005/v1/products/{id}",
+									"raw": "http://{{server}}/v1/products/{id}",
 									"protocol": "http",
 									"host": [
-										"localhost"
+										"{{server}}"
 									],
-									"port": "9005",
 									"path": [
 										"v1",
 										"products",
@@ -319,16 +307,76 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:9005/v1/products/{id}",
+									"raw": "http://{{server}}/v1/products/{id}",
 									"protocol": "http",
 									"host": [
-										"localhost"
+										"{{server}}"
 									],
-									"port": "9005",
 									"path": [
 										"v1",
 										"products",
 										"{id}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Order",
+					"item": [
+						{
+							"name": "POST Order",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"buyerId\" : \"\",\r\n    \"sellerId\" : \"\",\r\n    \"order\" : {\r\n        \r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{server}}/v1/orders",
+									"protocol": "http",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"v1",
+										"orders"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "PUT Order - send message",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"buyerId\" : \"\",\r\n    \"sellerId\" : \"\",\r\n    \"message\" : \"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{server}}/v1/orders",
+									"protocol": "http",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"v1",
+										"orders"
 									]
 								}
 							},
@@ -351,12 +399,11 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:9005/v1/login",
+							"raw": "http://{{server}}/v1/login",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{server}}"
 							],
-							"port": "9005",
 							"path": [
 								"v1",
 								"login"

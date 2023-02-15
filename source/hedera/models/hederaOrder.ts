@@ -1,6 +1,5 @@
-import { OrderStatuses } from "../../enums/orderStatuses";
 
-export class Order {
+export class HederaOrder {
     productId : string;
     quantity : number;
     amount: number;

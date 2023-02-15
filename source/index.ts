@@ -4,6 +4,7 @@ import buyerRoutes from './routes/buyer';
 import sellerRoutes from './routes/supplier';
 import loginRoute from './routes/login';
 import productRoutes from './routes/product';
+import ordersRoutes from './routes/order';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -17,7 +18,7 @@ async function main() {
 
     const app = express();
 
-    const PORT = 9005;
+    const PORT = 8005;
 
     process.on('uncaughtException', function (err) {
         console.log(err);
@@ -30,6 +31,8 @@ async function main() {
     app.use('/v1/login', loginRoute);
 
     app.use('/v1/products', productRoutes);
+
+    app.use('/v1/orders', ordersRoutes);
 
     app.listen(PORT, () => console.log(`The server is running on port ${PORT}`));
 }

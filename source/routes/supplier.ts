@@ -5,9 +5,11 @@ import { Company } from '../models/company';
 import { Supplier } from '../models/supplier';
 import createHederaAccount from '../hedera/accounts';
 import { OrderStatuses } from '../enums/orderStatuses';
-import { Order } from '../hedera/models/order';
 import { OrderView } from '../viewModels/orderView';
 import { Product } from '../models/product';
+import { getUserById, getUserOrders } from '../services/generic';
+import { TopicMessageQuery } from '@hashgraph/sdk';
+import { getOrderMessages } from '../hedera/topic';
 const router = express.Router();
 
 router.use(bodyParser.json());
@@ -85,17 +87,17 @@ router.post('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
 
-        let resources = await getById(req.params.id);
-
-        if (resources.length == 1) {
-            res.send(resources[0]);
-        }
-
-        if (resources.length == 0) {
+        let resources = await getUserById(req.params.id);
+    
+        if (!resources) {
             res.sendStatus(404);
         }
 
-        if (resources.length > 1) {
+        if (resources != null && resources.length == 1) {
+            res.send(resources[0]);
+        }
+
+        if (resources != null && resources.length > 1) {
             res.sendStatus(500);
         }
 
@@ -109,8 +111,11 @@ router.get('/:id/products', async (req, res) => {
     try {
 
         let supplier: Supplier | undefined = undefined;
-        let resources = await getById(req.params.id);
+        let resources = await getUserById(req.params.id);
 
+        if(!resources) {
+            res.sendStatus(404);
+        }
         if (resources.length == 1) {
             supplier = resources[0];
             const anonymousAddress = supplier?.anonymousAddress;
@@ -132,7 +137,16 @@ router.get('/:id/products', async (req, res) => {
 });
 
 router.get('/:id/orders', async (req, res) => {
-    try {
+    let finalOrders : string[] = [];
+
+     try {
+        //  let orders = await getUserOrders(req.params.id, true);
+        //  orders.forEach(order => {
+        //     finalOrders = getOrderMessages(order.topicId);
+        //     console.log("final order", finalOrders);
+        //  });
+        
+        //  res.send(finalOrders);
 
         var orders = [
             new OrderView(new Product(), "1", 10, 50, OrderStatuses.Created, new Date(), new Date(), new Date(), "strssse 75",
@@ -201,28 +215,11 @@ router.get('/:id/orders', async (req, res) => {
                     "Buyer x rejected the payment stating it has not received the delivery."
                 ])
         ];
-        res.send(orders);
+       res.send(orders);
+
     } catch (e) {
         res.sendStatus(500);
     }
 });
-
-async function getById(id: string) {
-    const container = await getUserContainer();
-
-    const querySpec = {
-        query: "select * from u where u.id=@id",
-        parameters: [
-            {
-                name: "@id",
-                value: id
-            }
-        ]
-    };
-
-    const { resources } = await container.items.query(querySpec).fetchAll();
-
-    return resources;
-}
 
 export default router;

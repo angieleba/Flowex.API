@@ -8,7 +8,7 @@ import { CosmosClient } from "@azure/cosmos";
 */
 export async function createDatabase() {
 
-  const { endpoint, key, databaseId, userContainerId } = config;
+  const { endpoint, key, databaseId, userContainerId, ordersContainerId } = config;
   const client = new CosmosClient({ endpoint, key });
   const partitionKey = config.partitionKey;
 
@@ -23,14 +23,24 @@ export async function createDatabase() {
   /**
    * Create the container if it does not exist
    */
-  const { container } = await client
+  const userContainer = await client
     .database(databaseId)
     .containers.createIfNotExists(
       { id: userContainerId, partitionKey },
       { offerThroughput: 400 }
     );
 
-  console.log(`Created container:\n${container.id}\n`);
+  console.log(`Created container:\n${userContainer.container.id}\n`);
+
+  const orderContainer = await client
+  .database(databaseId)
+  .containers.createIfNotExists(
+    { id: ordersContainerId, partitionKey },
+    { offerThroughput: 400 }
+  );
+
+console.log(`Created container:\n${orderContainer.container.id}\n`);
+
 }
 
 export async function getUserContainer(){
@@ -38,6 +48,15 @@ export async function getUserContainer(){
   const client = new CosmosClient({ endpoint, key });
   const database = client.database(databaseId);
   const container = database.container(userContainerId);
+
+  return container;
+}
+
+export async function getOrdersContainer(){
+  const { endpoint, key, databaseId, ordersContainerId } = config;
+  const client = new CosmosClient({ endpoint, key });
+  const database = client.database(databaseId);
+  const container = database.container(ordersContainerId);
 
   return container;
 }
