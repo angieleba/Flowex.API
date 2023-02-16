@@ -5,9 +5,9 @@ import { Company } from '../models/company';
 import { Supplier } from '../models/supplier';
 import createHederaAccount from '../hedera/accounts';
 import { OrderStatuses } from '../enums/orderStatuses';
-import { OrderView } from '../viewModels/orderView';
+import { OrderView } from '../models/order-view';
 import { Product } from '../models/product';
-import { getUserById, getUserOrders } from '../services/generic';
+import { getUserById, getUserOrders } from '../services/cosmosdb-queries';
 import { TopicMessageQuery } from '@hashgraph/sdk';
 import { getOrderByTopic } from '../hedera/topic';
 const router = express.Router();
@@ -105,7 +105,6 @@ router.get('/:id', async (req, res) => {
         res.sendStatus(500);
     }
 });
-
 
 router.get('/:id/products', async (req, res) => {
     try {

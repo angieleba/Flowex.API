@@ -1,14 +1,17 @@
 import express from 'express';
 import bodyParser from "body-parser";
 import { getOrdersContainer } from '../database';
-import { createTopic, sendMessageToTopic } from '../hedera/topic';
+import { createTopic, getOrderByTopic, sendMessageToTopic } from '../hedera/topic';
 import { getWallet } from '../hedera/wallet';
 import { HederaOrder } from '../hedera/models/hederaOrder';
 import { Order } from '../models/order';
 import dotenv from "dotenv";
-import { getOrderById } from '../services/generic';
+import { createOrder, getOrderById } from '../services/cosmosdb-queries';
 import { OrderUpdate } from '../models/orderUpdate';
 import { OrderStatuses } from '../enums/orderStatuses';
+import axios from 'axios';
+import { OrderView } from '../models/order-view';
+import { Product } from '../models/product';
 
 dotenv.config();
 
@@ -16,28 +19,28 @@ const router = express.Router();
 
 router.use(bodyParser.json());
 
-router.put('/:id',async (req, res) => {
-    
+router.put('/:id', async (req, res) => {
+
     try {
         const wallet = await getWallet();
 
         let order = await getOrderById(req.params.id);
 
-        let updateStatus : OrderUpdate = req.body.update;
+        let updateStatus: OrderUpdate = req.body.update;
 
         await sendMessageToTopic(wallet, order?.topicId!, JSON.stringify(updateStatus));
 
-        if(updateStatus.st == OrderStatuses.PartiallyPaid){
+        if (updateStatus.st == OrderStatuses.PartiallyPaid) {
             //TODO: send money in stable coin 
             //TODO: calculate pecentage 
         }
 
-        if(updateStatus.st == OrderStatuses.PartiallyPaid){
+        if (updateStatus.st == OrderStatuses.PartiallyPaid) {
             //TODO: send the rest of the money
         }
 
         res.sendStatus(200);
-    } catch(e) {
+    } catch (e) {
         console.log(e);
         res.sendStatus(500);
     }
@@ -49,9 +52,6 @@ router.post('/', async (req, res) => {
 
         await createOrder(topic.toString(), req.body.buyerId, req.body.sellerId); //Creating a mapping in cosmosDB to be able to query later by topicID
 
-        // var sellerAnonymous = await getUserById(req.body.sellerId);
-        // var buyerAnonymous = await getUserById(req.body.buyerId);
-
         var hederaOrder = new HederaOrder();
         hederaOrder.pId = req.body.order.productId;
         hederaOrder.c = req.body.order.cost;
@@ -61,9 +61,6 @@ router.post('/', async (req, res) => {
         hederaOrder.maxdd = req.body.order.maxDeliveryDate;
         hederaOrder.q = req.body.order.quantity;
 
-        // hederaOrder.buyerAnonymousAddress = buyerAnonymous.anonymousAddress;
-        // hederaOrder.supplierAnonymousAddress = sellerAnonymous.anonymousAddress;
-
         await sendMessageToTopic(wallet, topic, JSON.stringify(hederaOrder));
 
         res.sendStatus(200);
@@ -72,14 +69,18 @@ router.post('/', async (req, res) => {
     }
 });
 
-async function createOrder(topicId: string, buyerId: string, sellerId: string) {
+router.get('/:id', async (req, res) => {
     try {
-        const container = await getOrdersContainer();
-        let order = new Order(topicId, buyerId, sellerId);
-        await container.items.create(order);
-    } catch(e) {
-        throw new Error("Failed to create order in cosmosDB");
+        let topic = await getOrderById(req.params.id);
+        if (!topic) {
+            res.sendStatus(500);
+        }
+
+        let orderView: OrderView = await getOrderByTopic(topic!.topicId);
+        res.send(orderView);
+    } catch (e) {
+        res.sendStatus(500);
     }
-}
+});
 
 export default router;

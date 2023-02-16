@@ -1,5 +1,5 @@
 import { OrderStatuses } from "../enums/orderStatuses";
-import { Product } from "../models/product";
+import { Product } from "./product";
 
 export class OrderView {
     product : Product;

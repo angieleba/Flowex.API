@@ -14,7 +14,7 @@ export class Product extends Item {
     location: string;
     priceUnit: number;
     currency: string;
-    photo: string; //TODO: how to store photos
+    photo: string; 
     quantity: number;
     public partitionKey = "/product";
 

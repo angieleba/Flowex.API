@@ -4,7 +4,7 @@ import * as dotenv from 'dotenv';
 import { OrderStatuses } from "../enums/orderStatuses";
 import { OrderUpdate } from "../models/orderUpdate";
 import { Product } from "../models/product";
-import { OrderView } from "../viewModels/orderView";
+import { OrderView } from "../models/order-view";
 import { HederaOrder } from "./models/hederaOrder";
 
 dotenv.config();

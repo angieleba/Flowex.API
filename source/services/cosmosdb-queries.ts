@@ -60,3 +60,14 @@ export async function getUserOrders(id : string, isSupplier : boolean) : Promise
     const { resources } = await container.items.query(querySpec).fetchAll();
     return resources;
 }
+
+
+export async function createOrder(topicId: string, buyerId: string, sellerId: string) {
+    try {
+        const container = await getOrdersContainer();
+        let order = new Order(topicId, buyerId, sellerId);
+        await container.items.create(order);
+    } catch(e) {
+        throw new Error("Failed to create order in cosmosDB");
+    }
+}
