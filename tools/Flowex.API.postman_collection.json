@@ -178,7 +178,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://{{server}}/v1/suppliers/{supplierId}/orders",
+									"raw": "http://{{server}}/v1/suppliers/9ae28968-aef9-43a6-96c2-bda210e50f23/orders",
 									"protocol": "http",
 									"host": [
 										"{{server}}"
@@ -186,7 +186,7 @@
 									"path": [
 										"v1",
 										"suppliers",
-										"{supplierId}",
+										"9ae28968-aef9-43a6-96c2-bda210e50f23",
 										"orders"
 									]
 								}
@@ -199,7 +199,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "https://testnet.mirrornode.hedera.com/api/v1/topics/{topicId}/messages",
+									"raw": "https://testnet.mirrornode.hedera.com/api/v1/topics/0.0.3488609/messages",
 									"protocol": "https",
 									"host": [
 										"testnet",
@@ -211,7 +211,7 @@
 										"api",
 										"v1",
 										"topics",
-										"{topicId}",
+										"0.0.3488609",
 										"messages"
 									]
 								}
@@ -275,7 +275,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"treeName\" : \"\",\r\n    \"woodType\" : \"\",\r\n    \"qualityAttributes\" : [\r\n        {\"key\":\"value\"}\r\n    ],\r\n    \"processingType\" : \"\",\r\n    \"shade\" : \"\",\r\n    \"location\" : \"\",\r\n    \"priceUnit\" : 0,\r\n    \"photo\": \"\",\r\n    \"quantity\": 0\r\n}",
+									"raw": "{\r\n    \"location\" : \"hello\",\r\n    \"photo\": \"ssdd\",\r\n    \"pricePerUnit\" : 5,\r\n    \"isRaw\" : true,\r\n    \"amount\" : 10,\r\n    \"colour\" : \"brown\",\r\n    \"treeType\" : \"wood\",\r\n    \"woodType\" : 1,\r\n    \"unit\" : 0,\r\n    \"approved\" : true\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -283,7 +283,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://{{server}}/v1/products/{id}",
+									"raw": "http://{{server}}/v1/products/9ae28968-aef9-43a6-96c2-bda210e50f23",
 									"protocol": "http",
 									"host": [
 										"{{server}}"
@@ -291,7 +291,7 @@
 									"path": [
 										"v1",
 										"products",
-										"{id}"
+										"9ae28968-aef9-43a6-96c2-bda210e50f23"
 									]
 								}
 							},
@@ -358,7 +358,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"buyerId\" : \"\",\r\n    \"sellerId\" : \"\",\r\n    \"order\" : {\r\n        \"productId\": \"\",\r\n        \"cost\": \"\",\r\n        \"destinationAddress\": \"\",\r\n        \"maxConfirmationTime\": \"\",\r\n        \"maxDeliveryDate\": \"\",\r\n        \"quantity\": \"\"\r\n    }\r\n}",
+									"raw": "{\r\n    \"buyerId\" : \"45697ee0-2108-4012-b06d-a2c1e277c091\",\r\n    \"sellerId\" : \"9ae28968-aef9-43a6-96c2-bda210e50f23\",\r\n    \"order\" : {\r\n        \"productId\": \"11111\",\r\n        \"cost\": \"100\",\r\n        \"destinationAddress\": \"blblbl\",\r\n        \"maxConfirmationTime\": \"12-02-2023\",\r\n        \"maxDeliveryDate\": \"28-02-2023\",\r\n        \"quantity\": \"10\"\r\n    }\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -386,13 +386,33 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"currentStatus\":1,\r\n    \"message\" : \"\"\r\n}",
+									"raw": "{\r\n    \"update\" : {\r\n        \"st\": 2,\r\n        \"m\" : \"Seller confirmed order today.\"\r\n    } \r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
 										}
 									}
 								},
+								"url": {
+									"raw": "http://{{server}}/v1/orders/86025331-42b6-4642-90e4-64e3502e4b79",
+									"protocol": "http",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"v1",
+										"orders",
+										"86025331-42b6-4642-90e4-64e3502e4b79"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET Order by id",
+							"request": {
+								"method": "GET",
+								"header": [],
 								"url": {
 									"raw": "http://{{server}}/v1/orders/{orderId}",
 									"protocol": "http",
