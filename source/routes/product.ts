@@ -1,45 +1,65 @@
 import express from 'express';
 import bodyParser from "body-parser";
 import { Product } from '../models/product';
+import { createProduct, createProductCompany, getProductById } from '../smart-contracts/products';
+import { v4 as uuidv4 } from 'uuid';
 
 const router = express.Router();
 
 router.use(bodyParser.json());
 
 // GET PRODUCT DETAILS
-router.get('/:id', async (req, res) => {
-    try {
-        
-        res.send("BY ID");
+router.get('/:supplierId/:id', async (req, res) => {
+    try {    
+        await getProductById(req.params.id, req.params.supplierId);
+        res.sendStatus(200);
 
     } catch (e) {
+        console.log(e);
+        res.sendStatus(500);
+    }
+});
+
+router.post('/suppierCompany',async (req, res) => {
+    try {
+        var result = await createProductCompany(req.body.supplierId);
+        if(result) 
+                res.sendStatus(200);
+            else 
+                res.sendStatus(500);
+    } catch(e) {
+        console.log(e);
         res.sendStatus(500);
     }
 });
 
 //CREATE PRODUCT
-router.post('/', async (req, res) => {
+router.post('/:supplierId', async (req, res) => {
     try {
-
         let product = new Product();
+        product.productID = uuidv4();
         product.location = req.body.location;
         product.photo  = req.body.photo;
-        product.priceUnit = req.body.priceUnit;
-        product.processingType = req.body.processingType;
-        product.qualityAttributes = req.body.qualityAttributes;
-        product.quantity = req.body.quantity;
-        product.shade = req.body.shade;
-        product.treeName = req.body.treeName;
+        product.pricePerUnit = req.body.pricePerUnit;
+        product.isRaw = req.body.isRaw;
+        // product.qualityAttributes = req.body.qualityAttributes;
+        product.amount = req.body.amount;
+        product.colour = req.body.colour;
+        product.treeType = req.body.treeType;
         product.woodType = req.body.woodType;
+        product.unit = req.body.unit;
 
-        if(product.isValid()) {
-           
+        if(product.isValid()) { 
+            var productCreation = await createProduct(product, req.params.supplierId);
+            if(productCreation) 
                 res.sendStatus(200);
-
+            else 
+                res.sendStatus(500);
         } else {
             res.sendStatus(403);
         }
     } catch (e) {
+        console.log(e);
         res.sendStatus(500);
     }
 });
@@ -48,20 +68,11 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
     try {
 
-        let product = new Product();
-        product.location = req.body.location;
-        product.photo  = req.body.photo;
-        product.priceUnit = req.body.priceUnit;
-        product.processingType = req.body.processingType;
-        product.qualityAttributes = req.body.qualityAttributes;
-        product.quantity = req.body.quantity;
-        product.shade = req.body.shade;
-        product.treeName = req.body.treeName;
-        product.woodType = req.body.woodType;
+        let product : Product = req.body.product;
 
         if(product.isValid()) {
            
-                res.sendStatus(200);
+            res.sendStatus(200);
                      
         } else {
             res.sendStatus(403);

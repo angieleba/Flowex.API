@@ -1,46 +1,47 @@
-import { ProcessingType } from "../enums/processingType";
-import { QualityAttributes } from "../enums/qualityAttributes";
-import { Shade } from "../enums/shade";
+
+import { Unit } from "../enums/unit";
 import { WoodType } from "../enums/woodType";
-import { Item } from "./item";
 
 
-export class Product extends Item {
-    treeName: string;
-    woodType : WoodType;
-    qualityAttributes: Map<QualityAttributes, string>;
-    processingType: ProcessingType;
-    shade : Shade;
+export class Product {
+    productID : string;
+    treeType: string;
     location: string;
-    priceUnit: number;
-    currency: string;
+    woodType : WoodType;
+    colour : string;
+    isRaw : boolean;
+    pricePerUnit: number;
     photo: string; 
-    quantity: number;
-    public partitionKey = "/product";
+    amount: number;
+    unit : Unit;
+    approved: boolean;
 
     constructor() {
-        super();
-        this.treeName = "Wood";
-        this.woodType = WoodType.NotDefined;
-        this.qualityAttributes = new Map<QualityAttributes, string>();
-        this.processingType = ProcessingType.Undefined;
-        this.shade = Shade.Light;
-        this.location = "we dont know";
-        this.priceUnit = 0;
-        this.currency = "euro";
+        this.productID = "";
+        this.treeType = "";
+        this.location = "";
+        this.woodType = WoodType.Undefined;
+        this.colour = "";
+        this.isRaw = false;
+        this.pricePerUnit = 0;
         this.photo = "";
-        this.quantity = 0;
+        this.amount = 0;
+        this.unit = Unit.CBM;
+        this.approved = true;
     }
 
-
     isValid() : boolean {
-        return this.isNotNullEmptyOrUndefined(this.treeName) && this.isNotNullEmptyOrUndefined(this.location)
-        && this.isNotNullEmptyOrUndefined(this.photo); //TODO: do validation for all fields
+        return this.isNotNullEmptyOrUndefined(this.treeType) && 
+        this.isNotNullEmptyOrUndefined(this.location) &&
+        this.isNotNullEmptyOrUndefined(this.photo) &&
+        this.isNotNullEmptyOrUndefined(this.productID) &&
+        this.isNotNullEmptyOrUndefined(this.colour) &&
+        this.pricePerUnit > 0 &&
+        this.amount > 0 &&
+        this.woodType != WoodType.Undefined 
     }
 
     isNotNullEmptyOrUndefined(value : string) : boolean {
-        console.log(value);
-       var val = (value != null && value.length > 0) ? true : false;
-       return val;
+       return (value != null && value.length > 0) ? true : false;
     }
 }

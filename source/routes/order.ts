@@ -1,18 +1,13 @@
 import express from 'express';
 import bodyParser from "body-parser";
-import { getOrdersContainer } from '../database';
 import { createTopic, getOrderByTopic, sendMessageToTopic } from '../hedera/topic';
 import { getWallet } from '../hedera/wallet';
 import { HederaOrder } from '../hedera/models/hederaOrder';
-import { Order } from '../models/order';
-import dotenv from "dotenv";
 import { createOrder, getOrderById } from '../services/cosmosdb-queries';
 import { OrderUpdate } from '../models/orderUpdate';
 import { OrderStatuses } from '../enums/orderStatuses';
-import axios from 'axios';
 import { OrderView } from '../models/order-view';
-import { Product } from '../models/product';
-
+import dotenv from "dotenv";
 dotenv.config();
 
 const router = express.Router();

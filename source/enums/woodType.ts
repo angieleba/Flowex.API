@@ -1,8 +1,8 @@
 export enum WoodType {
-    SawLogs,
-    PulpWood, 
-    BioMass,
-    NotDefined
+    SawLogs = 1,
+    PulpWood = 2, 
+    BioMass = 3,
+    Undefined
 }
 
 

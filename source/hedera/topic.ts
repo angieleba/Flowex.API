@@ -47,6 +47,12 @@ export async function sendMessageToTopic(wallet: Wallet, topicId: TopicId | stri
 }
 
 export async function getOrderByTopic(topicId: string) : Promise<OrderView> {
+    if (process.env.HEDERA_MIRROR_NODE_URL == null) {
+        throw new Error(
+            "Environment variable HEDERA_MIRROR_NODE_URL are required."
+        );
+    }
+
     const response = await axios({
         url: `${process.env.HEDERA_MIRROR_NODE_URL}/api/v1/topics/${topicId}/messages`,
         method: "get",
