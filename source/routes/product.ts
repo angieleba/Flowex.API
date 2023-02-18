@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from "body-parser";
 import { Product } from '../models/product';
-import { createProduct, createProductCompany, getProductById } from '../smart-contracts/products';
+import { createProduct, createProductCompany, getProductById, getProducts } from '../smart-contracts/products';
 import { v4 as uuidv4 } from 'uuid';
 
 const router = express.Router();
@@ -11,8 +11,8 @@ router.use(bodyParser.json());
 // GET PRODUCT DETAILS
 router.get('/:supplierId/:id', async (req, res) => {
     try {    
-        await getProductById(req.params.id, req.params.supplierId);
-        res.sendStatus(200);
+        const products = await getProductById(req.params.id, req.params.supplierId);
+        res.json(products).sendStatus(200);
 
     } catch (e) {
         console.log(e);
@@ -20,7 +20,18 @@ router.get('/:supplierId/:id', async (req, res) => {
     }
 });
 
-router.post('/suppierCompany',async (req, res) => {
+router.get('/', async (req, res) => {
+    try {    
+        const products = await getProducts();
+        res.json(products).sendStatus(200);
+
+    } catch (e) {
+        console.log(e);
+        res.sendStatus(500);
+    }
+});
+
+router.post('/supplierCompany',async (req, res) => {
     try {
         var result = await createProductCompany(req.body.supplierId);
         if(result) 

@@ -5,46 +5,67 @@ import * as dotenv from 'dotenv';
 import { Product } from "../models/product";
 import { v4 as uuidv4 } from 'uuid';
 import { convertGuidToInt } from "../services/common";
-import { hethers } from "@hashgraph/hethers";
+import Web3 from "web3";
+
 import contractJson from '../smart-contracts/product-smart-contract.json';
 
 dotenv.config();
+const abi = contractJson.abi;
+const web3 = new Web3();
+
+const client = Client.forTestnet();
+client.setOperator(process.env.PRODUCT_OPERATOR_ID as string, process.env.PRODUCT_OPERATOR_KEY as string);
+
+function decodeFunctionResult(functionName: any, resultAsBytes: any) {
+    const functionAbi = abi.find(func => func.name === functionName);
+    const functionParameters = functionAbi?.outputs;
+    
+    const resultHex = '0x'.concat(Buffer.from(resultAsBytes).toString('hex'));
+    const result = web3.eth.abi.decodeParameters(functionParameters!, resultHex);
+    return result;
+}
 
 export async function getProductById(id: string, supplierId : string) {
+    const contractCallResult = await new ContractCallQuery()
+        .setContractId(process.env.PRODUCT_CONTRACT_ID!)
+        .setGas(100000)
+        .setFunction("getAllProducts",
+            new ContractFunctionParameters().addString(supplierId))
+        .execute(client);
 
-    var client = Client.forTestnet();
-    client.setOperator(process.env.PRODUCT_OPERATOR_ID!, process.env.PRODUCT_OPERATOR_KEY!);
+    const decoded = decodeFunctionResult("getAllProducts", contractCallResult.bytes);
 
-    console.log(contractJson.abi);
-    let provider = hethers.getDefaultProvider();
-    let contract = new hethers.Contract( process.env.PRODUCT_CONTRACT_ADDRESS!, contractJson.abi, provider);
+    if (
+        contractCallResult.errorMessage != null &&
+        contractCallResult.errorMessage != ""
+    ) {
+        throw new Error(`error calling contract: ${contractCallResult.errorMessage}`);
+    }
 
-    var re = await contract.getAllProducts(supplierId, { gasLimit: 300000 });
-    console.log("products", re);
+    return decoded;
+    
+    // console.log("contract message: ", contractCallResult.getBytes32());
+}
 
-    // if (process.env.PRODUCT_CONTRACT_ID == null || process.env.PRODUCT_OPERATOR_ID == null || process.env.PRODUCT_OPERATOR_KEY == null) {
-    //     throw new Error(
-    //         "Environment variables PRODUCT_CONTRACT_ID, PRODUCT_OPERATOR_ID or PRODUCT_OPERATOR_KEY are required."
-    //     );
-    // }
+export async function getProducts() {
+    const contractCallResult = await new ContractCallQuery()
+        .setContractId(process.env.PRODUCT_CONTRACT_ID!)
+        .setGas(100000)
+        .setFunction("getAllProducts",
+            new ContractFunctionParameters().addString("XYZ"))
+        .execute(client);
 
-    // var client = Client.forTestnet();
-    // client.setOperator(process.env.PRODUCT_OPERATOR_ID!, process.env.PRODUCT_OPERATOR_KEY!);
+    const decoded = decodeFunctionResult("getAllProducts", contractCallResult.bytes);
 
-    // const contractCallResult = await new ContractCallQuery()
-    //     .setContractId(process.env.PRODUCT_CONTRACT_ID!)
-    //     .setGas(100000)
-    //     .setFunction("getAllProducts",
-    //         new ContractFunctionParameters().addString(supplierId))
-    //     .execute(client);
+    if (
+        contractCallResult.errorMessage != null &&
+        contractCallResult.errorMessage != ""
+    ) {
+        throw new Error(`error calling contract: ${contractCallResult.errorMessage}`);
+    }
 
-    // if (
-    //     contractCallResult.errorMessage != null &&
-    //     contractCallResult.errorMessage != ""
-    // ) {
-    //     throw new Error(`error calling contract: ${contractCallResult.errorMessage}`);
-    // }
-
+    return decoded[0].map((i: string | any[]) => i.slice(0, 11))
+    
     // console.log("contract message: ", contractCallResult.getBytes32());
 }
 
@@ -57,7 +78,7 @@ export async function createProduct(product: Product, supplierId: string) : Prom
         }
 
         var client = Client.forTestnet();
-        client.setOperator(process.env.PRODUCT_OPERATOR_ID!, process.env.PRODUCT_OPERATOR_KEY!);
+        client.setOperator(process.env.PRODUCT_OPERATOR_ID, process.env.PRODUCT_OPERATOR_KEY);
 
         const productCreate = await new ContractExecuteTransaction()
             .setContractId(process.env.PRODUCT_CONTRACT_ID!)
@@ -115,7 +136,7 @@ export async function createProductCompany(supplierId: string) : Promise<boolean
         // //Get the transaction consensus status
         const transactionStatus = receipt.status;
 
-        console.log("The transaction consensus status is " +transactionStatus);
+        console.log("The transaction create company consensus status is " +transactionStatus);
         return true;
     } catch (e) {
         console.log(e);
