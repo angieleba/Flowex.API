@@ -6,6 +6,8 @@ import { Product } from "../models/product";
 import { v4 as uuidv4 } from 'uuid';
 import { convertGuidToInt } from "../services/common";
 import Web3 from "web3";
+import { hethers } from "@hashgraph/hethers";
+import { ethers } from 'ethers';
 
 import contractJson from '../smart-contracts/product-smart-contract.json';
 
@@ -43,8 +45,6 @@ export async function getProductById(id: string, supplierId : string) {
     }
 
     return decoded;
-    
-    // console.log("contract message: ", contractCallResult.getBytes32());
 }
 
 export async function getProducts() {
@@ -52,7 +52,29 @@ export async function getProducts() {
         .setContractId(process.env.PRODUCT_CONTRACT_ID!)
         .setGas(100000)
         .setFunction("getAllProducts",
-            new ContractFunctionParameters().addString("XYZ"))
+            new ContractFunctionParameters().addString("JAF Wood"))
+        .execute(client);
+
+    const decoded = decodeFunctionResult("getAllProducts", contractCallResult.bytes);
+
+    if (
+        contractCallResult.errorMessage != null &&
+        contractCallResult.errorMessage != ""
+    ) {
+        throw new Error(`error calling contract: ${contractCallResult.errorMessage}`);
+    }
+
+    return decoded[0].map((i: string | any[]) => i.slice(0, 11))
+    
+    // console.log("contract message: ", contractCallResult.getBytes32());
+}
+
+export async function getProductsBySupplier(supplier: string) {
+    const contractCallResult = await new ContractCallQuery()
+        .setContractId(process.env.PRODUCT_CONTRACT_ID!)
+        .setGas(100000)
+        .setFunction("getAllProducts",
+            new ContractFunctionParameters().addString(supplier))
         .execute(client);
 
     const decoded = decodeFunctionResult("getAllProducts", contractCallResult.bytes);
@@ -77,16 +99,18 @@ export async function createProduct(product: Product, supplierId: string) : Prom
             );
         }
 
-        var client = Client.forTestnet();
+        const client = Client.forTestnet();
         client.setOperator(process.env.PRODUCT_OPERATOR_ID, process.env.PRODUCT_OPERATOR_KEY);
-
+        const newProductId = convertGuidToInt(product.productID);
+        console.log("newProductId: " + newProductId);
+        
         const productCreate = await new ContractExecuteTransaction()
             .setContractId(process.env.PRODUCT_CONTRACT_ID!)
             .setGas(10000000)
             .setFunction("addProduct",
                 new ContractFunctionParameters()
                     .addString(supplierId)
-                    .addUint256(convertGuidToInt(product.productID))
+                    .addUint256(newProductId)
                     .addString(product.treeType)
                     .addString(product.location)
                     .addUint8(product.woodType)
@@ -113,6 +137,69 @@ export async function createProduct(product: Product, supplierId: string) : Prom
     }
 }
 
+export async function approveProduct(productIndex: number, productId: number, supplierId: string, baseURI: string) : Promise<boolean> {
+    try {
+        if (process.env.PRODUCT_CONTRACT_ID == null || process.env.PRODUCT_OPERATOR_ID == null || process.env.PRODUCT_OPERATOR_KEY == null) {
+            throw new Error(
+                "Environment variables PRODUCT_CONTRACT_ID, PRODUCT_OPERATOR_ID or PRODUCT_OPERATOR_KEY are required."
+            );
+        }
+        console.log(productIndex, productId, supplierId, baseURI);
+        
+        const client = Client.forTestnet();
+        client.setOperator(process.env.PRODUCT_OPERATOR_ID, process.env.PRODUCT_OPERATOR_KEY);
+
+        console.log("0x"+process.env.PRODUCT_OPERATOR_KEY);
+        
+        const wallet = new ethers.Wallet("0x"+process.env.PRODUCT_OPERATOR_KEY);
+        console.log(await wallet.getAddress());
+   
+        let dataToSign = {"CertificateTo":supplierId};
+
+        let dataHash = ethers.utils.keccak256(
+            ethers.utils.toUtf8Bytes(JSON.stringify(dataToSign))
+        );
+
+        let dataHashBin = ethers.utils.arrayify(dataHash)
+    
+     
+        let signature = await wallet.signMessage(dataHashBin); 
+        const r = ethers.utils.arrayify(signature.slice(0, 66));
+        const s = ethers.utils.arrayify("0x" + signature.slice(66, 130));
+        const v = parseInt(signature.slice(130, 132), 16);
+        console.log(process.env.PRODUCT_CONTRACT_ID);
+        console.log("Submitting...");
+        
+        const productApprove = await new ContractExecuteTransaction()
+            .setContractId(process.env.PRODUCT_CONTRACT_ID)
+            .setGas(10000000)
+            .setFunction("approveProduct",
+                new ContractFunctionParameters()
+                    .addBytes32(dataHashBin)
+                    .addUint8(v)
+                    .addBytes32(r)
+                    .addBytes32(s)
+                    .addUint256(productIndex)
+                    .addUint256(productId)
+                    .addString(supplierId)
+                    .addString(baseURI))
+            .execute(client);
+
+        //Request the receipt of the transaction
+        const receipt = await productApprove.getReceipt(client);
+
+        console.log("receipt", receipt);
+        //Get the transaction consensus status
+        const transactionStatus = receipt.status;
+
+        console.log("The transaction consensus status for product creation is " + transactionStatus);
+        return true;
+    } catch (e) {
+        console.log(e);
+        return false;
+    }
+}
+
 export async function createProductCompany(supplierId: string) : Promise<boolean> {
     try {
         if (process.env.PRODUCT_CONTRACT_ID == null || process.env.PRODUCT_OPERATOR_ID == null || process.env.PRODUCT_OPERATOR_KEY == null) {
@@ -121,7 +208,7 @@ export async function createProductCompany(supplierId: string) : Promise<boolean
             );
         }
 
-        var client = Client.forTestnet();
+        const client = Client.forTestnet();
         client.setOperator(process.env.PRODUCT_OPERATOR_ID!, process.env.PRODUCT_OPERATOR_KEY!);
 
         const transaction = await new ContractExecuteTransaction()
@@ -146,7 +233,7 @@ export async function createProductCompany(supplierId: string) : Promise<boolean
 }
 
 export async function updateProductSupply(product: Product) {
-    var wallet = await getProductSmartContractWallet();
+    const wallet = await getProductSmartContractWallet();
 
     if (process.env.PRODUCT_CONTRACT_ID == null) {
         throw new Error(
@@ -170,7 +257,7 @@ export async function updateProductSupply(product: Product) {
 }
 
 export async function deleteProduct(id: string) {
-    var wallet = await getProductSmartContractWallet();
+    const wallet = await getProductSmartContractWallet();
 
     if (process.env.PRODUCT_CONTRACT_ID == null) {
         throw new Error(

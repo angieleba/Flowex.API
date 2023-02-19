@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from "body-parser";
 import { Product } from '../models/product';
-import { createProduct, createProductCompany, getProductById, getProducts } from '../smart-contracts/products';
+import { createProduct, createProductCompany, getProductById, getProducts, getProductsBySupplier, approveProduct } from '../smart-contracts/products';
 import { v4 as uuidv4 } from 'uuid';
 
 const router = express.Router();
@@ -12,6 +12,19 @@ router.use(bodyParser.json());
 router.get('/:supplierId/:id', async (req, res) => {
     try {    
         const products = await getProductById(req.params.id, req.params.supplierId);
+        res.json(products).sendStatus(200);
+
+    } catch (e) {
+        console.log(e);
+        res.sendStatus(500);
+    }
+});
+
+router.get('/bySupplier', async (req, res) => {
+    try {    
+        console.log("called");
+        
+        const products = await getProductsBySupplier(req.query.supplierId as string);
         res.json(products).sendStatus(200);
 
     } catch (e) {
@@ -33,7 +46,21 @@ router.get('/', async (req, res) => {
 
 router.post('/supplierCompany',async (req, res) => {
     try {
-        var result = await createProductCompany(req.body.supplierId);
+        const result = await createProductCompany(req.body.supplierId);
+        if(result) 
+                res.sendStatus(200);
+            else 
+                res.sendStatus(500);
+    } catch(e) {
+        console.log(e);
+        res.sendStatus(500);
+    }
+});
+
+router.post('/approveProduct',async (req, res) => {
+    try {
+        const {productIndex, productId, supplierId, baseURI} = req.body;
+        const result = await approveProduct(productIndex, productId, supplierId, baseURI);
         if(result) 
                 res.sendStatus(200);
             else 
@@ -45,7 +72,7 @@ router.post('/supplierCompany',async (req, res) => {
 });
 
 //CREATE PRODUCT
-router.post('/:supplierId', async (req, res) => {
+router.post('/createProduct', async (req, res) => {
     try {
         let product = new Product();
         product.productID = uuidv4();
@@ -61,7 +88,7 @@ router.post('/:supplierId', async (req, res) => {
         product.unit = req.body.unit;
 
         if(product.isValid()) { 
-            var productCreation = await createProduct(product, req.params.supplierId);
+            const productCreation = await createProduct(product, req.body.supplierId);
             if(productCreation) 
                 res.sendStatus(200);
             else 
