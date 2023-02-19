@@ -70,8 +70,10 @@ export async function getOrderByTopic(topicId: string) : Promise<OrderView> {
         messages.push(statusMsg.m);
     }
 
+    const product = await getProductById(orderJsonParsed.pId);
+
     let order = new OrderView(
-        new Product(), //TODO: get from smart contract
+        product, 
         topicId, 
         orderJsonParsed.q, 
         orderJsonParsed.c, 

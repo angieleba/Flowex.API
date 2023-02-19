@@ -31,32 +31,6 @@ function decodeFunctionResult(functionName: any, resultAsBytes: any) {
     return result;
 }
 
-export async function getProductById(id: string, supplierId : string) {
-    const contractCallResult = await new ContractCallQuery()
-        .setContractId(process.env.PRODUCT_CONTRACT_ID!)
-        .setGas(100000)
-        .setFunction("getAllProducts",
-            new ContractFunctionParameters().addString(supplierId))
-        .execute(client);
-
-    const decoded = decodeFunctionResult("getAllProducts", contractCallResult.bytes);
-
-    if (
-        contractCallResult.errorMessage != null &&
-        contractCallResult.errorMessage != ""
-    ) {
-        throw new Error(`error calling contract: ${contractCallResult.errorMessage}`);
-    }
-   
-    
-
-    return decoded[0].filter((i: any) => {
-        if(i.productId === id){
-            return i.slice(0, 11);
-        }
-    } );
-}
-
 async function getAllSupplierIds() {
     const container = await getUserContainer();
     const querySpec = {
@@ -74,14 +48,49 @@ async function getAllSupplierIds() {
     return resources.map(elm => elm.id);
 }
 
-export async function getProducts() {
-
-    
+export async function getProductById(id: string) {
     const allSuppliersIds = await getAllSupplierIds();
-    console.log(allSuppliersIds);
 
-    let allProducts = {
-};
+    for (let index = 0; index < allSuppliersIds.length; index++) {
+        const supplierId = allSuppliersIds[index];
+        const contractCallResult = await new ContractCallQuery()
+        .setContractId(process.env.PRODUCT_CONTRACT_ID!)
+        .setGas(1000000)
+        .setFunction("getAllProducts",
+            new ContractFunctionParameters().addString(supplierId))
+        .execute(client);
+
+        const decoded = decodeFunctionResult("getAllProducts", contractCallResult.bytes);
+
+        if (
+            contractCallResult.errorMessage != null &&
+            contractCallResult.errorMessage != ""
+        ) {
+            throw new Error(`error calling contract: ${contractCallResult.errorMessage}`);
+        }
+
+       
+        
+        const result = decoded[0].filter((i: any[]) => {
+            if(i[0] === id){
+                return i.slice(0, 11);
+            }
+        });
+      
+        
+        if (result.length !== 0) {
+            return result[0]
+        }
+    }
+}
+
+
+
+export async function getProducts() {
+    const allSuppliersIds = await getAllSupplierIds();
+    // console.log(allSuppliersIds);
+
+    let allProducts = {};
     
     for (let index = 0; index < allSuppliersIds.length; index++) {
         const supplierId = allSuppliersIds[index];

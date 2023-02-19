@@ -9,9 +9,9 @@ const router = express.Router();
 router.use(bodyParser.json());
 
 // GET PRODUCT DETAILS
-router.get('/:supplierId/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
     try {    
-        const products = await getProductById(req.params.id, req.params.supplierId);
+        const products = await getProductById(req.params.id);
         res.json(products).sendStatus(200);
 
     } catch (e) {
