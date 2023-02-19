@@ -18,7 +18,9 @@ import {
   PrivateKey,
   Client,
   TransferTransaction,
+  TokenMintTransaction,
   Hbar,
+  TransactionReceipt,
 } from "@hashgraph/sdk";
 
 // Configure accounts and client
@@ -65,24 +67,43 @@ router.put("/:id", async (req, res) => {
     // To do transfer fiat to USDC to operator account
 
     if (updateStatus.st == OrderStatuses.PartiallyPaid) {
-        //TO DO calculate partial payment
-        const payment = Number(updateStatus.m.split(",")[0])
-        const receiverId = String(updateStatus.m.split(",")[1])
-        await pay(payment, receiverId);
+      //TO DO calculate partial payment
+      const payment = Number(updateStatus.m.split(",")[0]);
+      const receiverId = String(updateStatus.m.split(",")[1]);
+      await pay(payment, receiverId);
     } else if (updateStatus.st == OrderStatuses.Completed) {
-        const payment = Number(updateStatus.m.split(",")[0])
-        const receiverId = String(updateStatus.m.split(",")[1])
-        await pay(payment, receiverId);
-        
+      const payment = Number(updateStatus.m.split(",")[0]);
+      const receiverId = String(updateStatus.m.split(",")[1]);
+      await pay(payment, receiverId);
+      const transaction = await new TokenMintTransaction()
+        .setTokenId(tokenId)
+        .setAmount(1000)
+        .freezeWith(client);
+
+      //Sign with the supply private key of the token
+      const signTx = await transaction.sign(operatorKey);
+
+      //Submit the transaction to a Hedera network
+      const txResponse = await signTx.execute(client);
+
+      //Request the receipt of the transaction
+      const receipt: TransactionReceipt = await txResponse.getReceipt(client);
+
+      //Get the transaction consensus status
+      const transactionStatus = receipt.status;
+
+      console.log(
+        "The transaction consensus status " + transactionStatus.toString()
+      );
+
+      updateStatus.m += receipt.scheduledTransactionId?.toString()
     }
 
-    
-
     await sendMessageToTopic(
-        wallet,
-        order?.topicId!,
-        JSON.stringify(updateStatus)
-      );
+      wallet,
+      order?.topicId!,
+      JSON.stringify(updateStatus)
+    );
 
     res.sendStatus(200);
   } catch (e) {
