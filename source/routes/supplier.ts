@@ -10,6 +10,8 @@ import { Product } from '../models/product';
 import { getUserById, getUserOrders } from '../services/cosmosdb-queries';
 import { TopicMessageQuery } from '@hashgraph/sdk';
 import { getOrderByTopic } from '../hedera/topic';
+import { getProductsBySupplier } from '../smart-contracts/products';
+
 const router = express.Router();
 
 router.use(bodyParser.json());
@@ -118,9 +120,9 @@ router.get('/:id/products', async (req, res) => {
         if (resources.length == 1) {
             supplier = resources[0];
             const anonymousAddress = supplier?.anonymousAddress;
-
-            //TODO: Use hedera address to take products from smart contract
-            res.send("LIST OF PRODUCTS OF SUPPLIER");
+            const supplierProducts = await getProductsBySupplier(req.params.id);
+            
+            res.send(supplierProducts);
         }
 
         if (resources.length == 0) {
