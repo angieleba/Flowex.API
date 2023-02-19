@@ -141,6 +141,8 @@ router.get('/:id/orders', async (req, res) => {
      try {
 
          let topics = await getUserOrders(req.params.id, true);
+         console.log(topics);
+         
          for (let i = 0; i < topics.length; i++) {
             let orderView : OrderView = await getOrderByTopic(topics[i].topicId);
             finalOrders.push(orderView);
@@ -149,6 +151,8 @@ router.get('/:id/orders', async (req, res) => {
          res.send(finalOrders);
 
     } catch (e) {
+        // console.log(e);
+        
         res.sendStatus(500);
     }
 });

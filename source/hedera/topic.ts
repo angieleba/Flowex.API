@@ -6,6 +6,8 @@ import { OrderUpdate } from "../models/orderUpdate";
 import { Product } from "../models/product";
 import { OrderView } from "../models/order-view";
 import { HederaOrder } from "./models/hederaOrder";
+import {  getProductById } from '../smart-contracts/products';
+
 
 dotenv.config();
 

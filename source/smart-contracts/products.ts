@@ -8,6 +8,10 @@ import { convertGuidToInt } from "../services/common";
 import Web3 from "web3";
 import { hethers } from "@hashgraph/hethers";
 import { ethers } from 'ethers';
+import { getUserContainer } from '../database';
+import { Supplier } from '../models/supplier';
+
+
 
 import contractJson from '../smart-contracts/product-smart-contract.json';
 
@@ -43,28 +47,64 @@ export async function getProductById(id: string, supplierId : string) {
     ) {
         throw new Error(`error calling contract: ${contractCallResult.errorMessage}`);
     }
+   
+    
 
-    return decoded;
+    return decoded[0].filter((i: any) => {
+        if(i.productId === id){
+            return i.slice(0, 11);
+        }
+    } );
+}
+
+async function getAllSupplierIds() {
+    const container = await getUserContainer();
+    const querySpec = {
+        query: "select * from u where u.partitionKey=@partitionKey",
+        parameters: [
+            {
+                name: "@partitionKey",
+                value: new Supplier().partitionKey
+            }
+        ]
+    };
+
+    // // Get items 
+    const { resources } = await container.items.query(querySpec).fetchAll();
+    return resources.map(elm => elm.id);
 }
 
 export async function getProducts() {
-    const contractCallResult = await new ContractCallQuery()
+
+    
+    const allSuppliersIds = await getAllSupplierIds();
+    console.log(allSuppliersIds);
+
+    let allProducts = {
+};
+    
+    for (let index = 0; index < allSuppliersIds.length; index++) {
+        const supplierId = allSuppliersIds[index];
+        const contractCallResult = await new ContractCallQuery()
         .setContractId(process.env.PRODUCT_CONTRACT_ID!)
-        .setGas(100000)
+        .setGas(1000000)
         .setFunction("getAllProducts",
-            new ContractFunctionParameters().addString("JAF Wood"))
+            new ContractFunctionParameters().addString("6e87b0fd-1bf7-4ef7-95b2-c406f77d913f"))
         .execute(client);
 
-    const decoded = decodeFunctionResult("getAllProducts", contractCallResult.bytes);
+        const decoded = decodeFunctionResult("getAllProducts", contractCallResult.bytes);
 
-    if (
-        contractCallResult.errorMessage != null &&
-        contractCallResult.errorMessage != ""
-    ) {
-        throw new Error(`error calling contract: ${contractCallResult.errorMessage}`);
+        if (
+            contractCallResult.errorMessage != null &&
+            contractCallResult.errorMessage != ""
+        ) {
+            throw new Error(`error calling contract: ${contractCallResult.errorMessage}`);
+        }
+
+        allProducts = {...allProducts, [supplierId]: decoded[0].map((i: string | any[]) => i.slice(0, 11)) };
+        
     }
-
-    return decoded[0].map((i: string | any[]) => i.slice(0, 11))
+    return allProducts;
     
     // console.log("contract message: ", contractCallResult.getBytes32());
 }
@@ -110,7 +150,7 @@ export async function createProduct(product: Product, supplierId: string) : Prom
             .setFunction("addProduct",
                 new ContractFunctionParameters()
                     .addString(supplierId)
-                    .addUint256(newProductId)
+                    .addUint256(Math.random()*(89999) + 10000)
                     .addString(product.treeType)
                     .addString(product.location)
                     .addUint8(product.woodType)
